@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket デモ</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // WebSocket サーバーに接続
+            const socket = new WebSocket('ws://localhost:5005');
+
+            // 接続が開かれたときのイベント
+            socket.onopen = function(event) {
+                console.log("サーバーに接続しました");
+            };
+
+            // サーバーからメッセージを受け取ったときのイベント
+            socket.onmessage = function(event) {
+                const messageDisplay = document.getElementById('messages');
+                messageDisplay.textContent += event.data + '\n'; // 受け取ったメッセージを表示
+            };
+
+            // メッセージ送信処理
+            document.getElementById('sendButton').addEventListener('click', function() {
+                const messageInput = document.getElementById('messageInput');
+                const message = messageInput.value;
+                socket.send(message); // サーバーにメッセージを送信
+                messageInput.value = ''; // 入力フィールドをクリア
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>WebSocket デモ</h1>
+    <input type="text" id="messageInput" placeholder="メッセージを入力">
+    <button id="sendButton">送信</button>
+    <h2>受信したメッセージ:</h2>
+    <pre id="messages"></pre>
+</body>
+</html>
